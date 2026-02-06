@@ -1,0 +1,18 @@
+{
+  "users": [
+    { "id": 1, "name": "muslum", "email": "muslum@example.com", "password": "123456" },
+    { "id": 2, "name": "user", "email": "user@example.com", "password": "abcdef" }
+  ],
+  "stores": [
+    {
+      "id": 1,
+      "name": "Kontakt",
+      "category": "Electronics",
+      "products": [
+        { "id": 1, "name": "iPhone 15", "price": 3000, "description": "Apple iPhone 15 128GB", "image": "https://kontakt.az/media/catalog/product/cache/f8158826193ba5faa8b862a9bd1eb9e9/t/m/tm-dg-sbp-1105-sm-3742_8.png" },
+        { "id": 2, "name": "Samsung Galaxy S23", "price": 2500, "description": "Samsung Galaxy S23 128GB", "image": "https://kontakt.az/media/catalog/product/cache/f8158826193ba5faa8b862a9bd1eb9e9/t/m/tm-dg-sbp-1105-sm-3742_8.png" }
+      ]
+    }
+
+  ]
+}
