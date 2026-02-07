@@ -8,7 +8,6 @@ export const shopsRoutes: Routes = [
   { path: ':id', component: ShopDetailComponent }
 ];
 
-// Separate product routes that will be loaded at root level
 export const productRoutes: Routes = [
   { path: 'products/:id', component: ProductDetailComponent }
 ];

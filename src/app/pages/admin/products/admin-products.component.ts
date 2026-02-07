@@ -89,7 +89,6 @@ export class AdminProductsComponent implements OnInit {
 
   saveProduct(productData: any): void {
     if (this.editingProduct) {
-      // Update existing product
       this.productService.updateProduct(this.editingProduct.id, productData).subscribe({
         next: () => {
           this.closeModal();
@@ -101,7 +100,6 @@ export class AdminProductsComponent implements OnInit {
         }
       });
     } else {
-      // Create new product
       const newProduct = {
         ...productData,
         createdAt: new Date().toISOString()

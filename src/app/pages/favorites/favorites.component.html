@@ -1,5 +1,4 @@
 <div class="min-h-screen bg-gray-50">
-  <!-- Header -->
   <div class="bg-white border-b border-gray-200">
     <div class="container mx-auto px-4 py-8">
       <div class="max-w-6xl mx-auto">
@@ -26,7 +25,6 @@
     </div>
   </div>
 
-  <!-- Content -->
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
       <!-- Loading State -->
@@ -35,7 +33,6 @@
         <p class="text-gray-600">Loading favorites...</p>
       </div>
 
-      <!-- Empty State -->
       <div *ngIf="!loading && favorites.length === 0" class="text-center py-16">
         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,11 +52,9 @@
         </a>
       </div>
 
-      <!-- Favorites Grid -->
       <div *ngIf="!loading && favorites.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div *ngFor="let favorite of favorites"
              class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-1 group relative">
-          <!-- Remove Button -->
           <button (click)="removeFavorite(favorite.product.id, $event)"
                   class="absolute top-3 right-3 z-10 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
                   title="Remove from favorites">
@@ -68,9 +63,7 @@
             </svg>
           </button>
 
-          <!-- Product Link -->
           <a [routerLink]="['/products', favorite.product.id]" class="block">
-            <!-- Image -->
             <div class="h-48 bg-gray-100 relative overflow-hidden">
               <img 
                 [src]="favorite.product.imageUrl | defaultImage" 
@@ -91,7 +84,6 @@
               </div>
             </div>
 
-            <!-- Content -->
             <div class="p-5">
               <div class="mb-2">
                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-700">

@@ -67,7 +67,6 @@ export class AdminShopsComponent implements OnInit {
 
   saveShop(shopData: any): void {
     if (this.editingShop) {
-      // Update existing shop
       this.shopService.updateShop(this.editingShop.id, shopData).subscribe({
         next: () => {
           this.closeModal();
@@ -79,7 +78,6 @@ export class AdminShopsComponent implements OnInit {
         }
       });
     } else {
-      // Create new shop
       const newShop = {
         ...shopData,
         createdAt: new Date().toISOString()

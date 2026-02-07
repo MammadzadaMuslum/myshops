@@ -34,6 +34,7 @@
         >Shops</a
       >
       <a
+        *ngIf="userService.user()"
         routerLink="/favorites"
         routerLinkActive="text-blue-600"
         class="hover:text-blue-600 transition relative"
@@ -50,6 +51,7 @@
         </span>
       </a>
       <a
+        *ngIf="userService.user()"
         routerLink="/admin"
         routerLinkActive="text-blue-600"
         class="hover:text-blue-600 transition"
@@ -130,13 +132,13 @@
       <mat-menu #menu="matMenu" class="!rounded-2xl">
         <button mat-menu-item routerLink="/">Home</button>
         <button mat-menu-item routerLink="/shops">Shops</button>
-        <button mat-menu-item routerLink="/favorites">
+        <button *ngIf="userService.user()" mat-menu-item routerLink="/favorites">
           Favorites
           <span *ngIf="favoritesCount > 0" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 inline-flex items-center justify-center">
             {{ favoritesCount }}
           </span>
         </button>
-        <button mat-menu-item routerLink="/admin">Admin</button>
+        <button *ngIf="userService.user()" mat-menu-item routerLink="/admin">Admin</button>
         <mat-divider></mat-divider>
 
         <ng-container *ngIf="!userService.user()">

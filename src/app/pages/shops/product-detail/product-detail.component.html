@@ -25,14 +25,14 @@
     <div class="max-w-6xl mx-auto">
       <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
-          <!-- Product Image -->
+          
           <div class="bg-gray-100 relative">
             <img 
               [src]="product.imageUrl | defaultImage" 
               [alt]="product.name"
               class="w-full h-full object-cover min-h-[400px] lg:min-h-full"
             >
-            <!-- Stock Badge -->
+        
             <div class="absolute top-4 left-4">
               <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-white shadow-lg"
                     [class.text-green-700]="product.stock > 10"
@@ -47,24 +47,24 @@
             </div>
           </div>
 
-          <!-- Product Info -->
+      
           <div class="p-6 lg:p-10">
-            <!-- Category -->
+         
             <div class="mb-4">
               <span class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium bg-blue-50 text-blue-700">
                 {{ product.category }}
               </span>
             </div>
 
-            <!-- Product Name -->
+     
             <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">{{ product.name }}</h1>
 
-            <!-- Price -->
+
             <div class="flex items-baseline gap-2 mb-6">
               <span class="text-4xl font-bold text-gray-900">${{ product.price | number:'1.0-0' }}</span>
             </div>
 
-            <!-- Description -->
+        
             <div class="mb-8">
               <h3 class="text-sm font-medium text-gray-900 mb-2 uppercase tracking-wider">Description</h3>
               <p class="text-gray-600 leading-relaxed">
@@ -72,7 +72,7 @@
               </p>
             </div>
 
-            <!-- Shop Info -->
+         
             <div class="bg-gray-50 rounded-2xl p-5 mb-8">
               <h3 class="text-sm font-medium text-gray-900 mb-3 uppercase tracking-wider">Sold by</h3>
               <div class="flex items-center gap-4">
@@ -92,7 +92,7 @@
               </div>
             </div>
 
-            <!-- Product Details Grid -->
+
             <div class="grid grid-cols-2 gap-4 mb-8">
               <div class="bg-gray-50 rounded-xl p-4">
                 <p class="text-sm text-gray-500 mb-1">Category</p>
@@ -114,7 +114,7 @@
               </div>
             </div>
 
-            <!-- Action Buttons -->
+        
             <div class="flex flex-col sm:flex-row gap-3">
               <button class="flex-1 px-6 py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
