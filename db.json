@@ -19,27 +19,73 @@
       "id": 3
     }
   ],
-  "stores": [
+  "shops": [
     {
       "id": 1,
       "name": "Kontakt",
+      "ownerName": "Muslum Mammadzada",
+      "ownerEmail": "muslum@kontakt.az",
+      "contactPhone": "+994 50 123 45 67",
+      "address": "Baku, Azerbaijan",
       "category": "Electronics",
-      "products": [
-        {
-          "id": 1,
-          "name": "iPhone 15",
-          "price": 3000,
-          "description": "Apple iPhone 15 128GB",
-          "image": "https://kontakt.az/media/catalog/product/cache/f8158826193ba5faa8b862a9bd1eb9e9/t/m/tm-dg-sbp-1105-sm-3742_8.png"
-        },
-        {
-          "id": 2,
-          "name": "Samsung Galaxy S23",
-          "price": 2500,
-          "description": "Samsung Galaxy S23 128GB",
-          "image": "https://kontakt.az/media/catalog/product/cache/f8158826193ba5faa8b862a9bd1eb9e9/t/m/tm-dg-sbp-1105-sm-3742_8.png"
-        }
-      ]
+      "status": "active",
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Tech Store",
+      "ownerName": "John Doe",
+      "ownerEmail": "john@techstore.az",
+      "contactPhone": "+994 55 987 65 43",
+      "address": "Baku, Azerbaijan",
+      "category": "Electronics",
+      "status": "active",
+      "createdAt": "2024-01-20T14:30:00Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "shopId": 1,
+      "name": "iPhone 15",
+      "price": 3000,
+      "stock": 10,
+      "description": "Apple iPhone 15 128GB",
+      "category": "Smartphones",
+      "imageUrl": "https://kontakt.az/media/catalog/product/cache/f8158826193ba5faa8b862a9bd1eb9e9/t/m/tm-dg-sbp-1105-sm-3742_8.png",
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "shopId": 1,
+      "name": "Samsung Galaxy S23",
+      "price": 2500,
+      "stock": 15,
+      "description": "Samsung Galaxy S23 128GB",
+      "category": "Smartphones",
+      "imageUrl": "https://kontakt.az/media/catalog/product/cache/f8158826193ba5faa8b862a9bd1eb9e9/t/m/tm-dg-sbp-1105-sm-3742_8.png",
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "shopId": 2,
+      "name": "MacBook Pro 14",
+      "price": 4500,
+      "stock": 5,
+      "description": "Apple MacBook Pro 14-inch M3 Pro",
+      "category": "Laptops",
+      "imageUrl": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp14-spacegray-select-202310?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1697311054290",
+      "createdAt": "2024-01-20T14:30:00Z"
+    },
+    {
+      "shopId": 2,
+      "name": "Frontend Developer",
+      "description": "",
+      "price": 33,
+      "stock": 65,
+      "category": "Electronics",
+      "imageUrl": "",
+      "id": 4
     }
   ]
 }

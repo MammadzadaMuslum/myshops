@@ -1,5 +1,5 @@
 <mat-toolbar
-  class="!fixed top-0 left-0 w-full z-50 !bg-white/80 backdrop-blur-xl border-b border-gray-200"
+  class="sticky top-0 left-0 w-full z-50 !bg-white/80 backdrop-blur-xl border-b border-gray-200"
 >
   <div class="w-full max-w-7xl mx-auto flex items-center justify-between px-4">
     <a routerLink="/" class="flex items-center gap-3 select-none group">
@@ -28,10 +28,16 @@
         ></span>
       </a>
       <a
-        routerLink="/products"
+        routerLink="/shops"
         routerLinkActive="text-blue-600"
         class="hover:text-blue-600 transition"
-        >Products</a
+        >Shops</a
+      >
+      <a
+        routerLink="/admin"
+        routerLinkActive="text-blue-600"
+        class="hover:text-blue-600 transition"
+        >Admin</a
       >
     </nav>
 
@@ -107,7 +113,8 @@
 
       <mat-menu #menu="matMenu" class="!rounded-2xl">
         <button mat-menu-item routerLink="/">Home</button>
-        <button mat-menu-item routerLink="/products">Products</button>
+        <button mat-menu-item routerLink="/shops">Shops</button>
+        <button mat-menu-item routerLink="/admin">Admin</button>
         <mat-divider></mat-divider>
 
         <ng-container *ngIf="!userService.user()">
