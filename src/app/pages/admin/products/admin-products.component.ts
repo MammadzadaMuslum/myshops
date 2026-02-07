@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ProductService, Product } from '../../../services/product.service';
 import { ShopService, Shop } from '../../../services/shop.service';
 import { ProductFormModalComponent } from './product-form-modal.component';
+import { DefaultImagePipe } from '../../../pipes/default-image.pipe';
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [CommonModule, ProductFormModalComponent],
+  imports: [CommonModule, ProductFormModalComponent, DefaultImagePipe],
   templateUrl: './admin-products.component.html',
   styleUrls: ['./admin-products.component.css']
 })

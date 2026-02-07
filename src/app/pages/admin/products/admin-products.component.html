@@ -46,7 +46,7 @@
             <div class="flex items-center">
               <div class="flex-shrink-0 h-10 w-10">
                 <img class="h-10 w-10 rounded-full object-cover" 
-                     [src]="product.imageUrl || 'https://placehold.co/40x40/3b82f6/ffffff?text=Product'" 
+                     [src]="product.imageUrl | defaultImage" 
                      [alt]="product.name">
               </div>
               <div class="ml-4">

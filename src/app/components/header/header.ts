@@ -1,5 +1,5 @@
 // src/app/components/header/header.ts
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { UserService } from '../../services/user.service';
+import { FavoritesService } from '../../services/favorites.service';
 
 @Component({
   selector: 'app-header',
@@ -23,9 +24,23 @@ import { UserService } from '../../services/user.service';
   ],
   templateUrl: './header.html',
 })
-export class Header {
-  constructor(public userService: UserService, private router: Router) {
+export class Header implements OnInit {
+  favoritesCount = 0;
+
+  constructor(
+    public userService: UserService,
+    private favoritesService: FavoritesService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {
     this.userService.loadUserFromStorage();
+  }
+
+  ngOnInit(): void {
+    this.favoritesService.favorites$.subscribe(() => {
+      this.favoritesCount = this.favoritesService.getFavoritesCount();
+      this.cdr.detectChanges();
+    });
   }
 
   logout() {

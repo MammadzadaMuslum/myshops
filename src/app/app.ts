@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 //components import
 import { Header } from './components/header/header';
+import { ScrollToTopComponent } from './components/scroll-to-top/scroll-to-top.component';
 
 // Material import
 import { MatButtonModule } from '@angular/material/button';
@@ -20,7 +21,8 @@ imports: [
   CommonModule,
   MatButtonModule,
   MatButtonModule, 
-  Header,     
+  Header,
+  ScrollToTopComponent     
 ],
   templateUrl: './app.html',
   styleUrls: ['./app.css'] 
