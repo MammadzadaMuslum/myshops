@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../services/user.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class Login {
   showPassword = false;
   loginError = '';
 
-  private apiUrl = 'http://localhost:3000/users'; // json-server URL
+  private apiUrl = `${environment.apiUrl}/users`;
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
