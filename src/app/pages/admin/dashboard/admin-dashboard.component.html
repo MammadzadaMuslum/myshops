@@ -30,13 +30,15 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-1 p-8">
+    <main class="flex-1 p-8 min-w-0 overflow-hidden">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p class="text-gray-600 mt-2">Manage your shops and products</p>
       </div>
 
-      <router-outlet></router-outlet>
+      <div class="w-full overflow-x-auto">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 </div>

@@ -9,7 +9,7 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'shops', loadChildren: () => import('./pages/shops/shops.routes').then(m => m.shopsRoutes) },
   { path: 'products/:id', loadComponent: () => import('./pages/shops/product-detail/product-detail.component').then(m => m.ProductDetailComponent) },
-  { path: 'favorites', loadComponent: () => import('./pages/favorites/favorites.component').then(m => m.FavoritesComponent), canActivate: [AuthGuard] },
+  { path: 'favorites', loadComponent: () => import('./pages/favorites/favorites.component').then(m => m.FavoritesComponent) },
   { path: 'admin', loadChildren: () => import('./pages/admin/admin.routes').then(m => m.adminRoutes), canActivate: [AuthGuard] },
   { path: 'login', component: Login },
   { path: 'register', component: Register },

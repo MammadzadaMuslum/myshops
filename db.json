@@ -17,6 +17,12 @@
       "email": "salam@gmail.com",
       "password": "salam123",
       "id": 3
+    },
+    {
+      "name": "salamlar",
+      "email": "admin@gmail.com",
+      "password": "123456",
+      "id": 4
     }
   ],
   "shops": [

@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { UserService } from '../../services/user.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { ProfileModalComponent } from '../profile-modal/profile-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -21,11 +22,14 @@ import { FavoritesService } from '../../services/favorites.service';
     MatIconModule,
     MatMenuModule,
     MatDividerModule,
+    ProfileModalComponent,
   ],
   templateUrl: './header.html',
 })
 export class Header implements OnInit {
   favoritesCount = 0;
+  isMobileMenuOpen = false;
+  isProfileModalOpen = false;
 
   constructor(
     public userService: UserService,
@@ -46,5 +50,45 @@ export class Header implements OnInit {
   logout() {
     this.userService.clearUser();
     this.router.navigateByUrl('/login');
+  }
+
+  onFavoritesClick(event: Event) {
+    event.preventDefault();
+    this.router.navigate(['/favorites']);
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    if (this.isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
+    document.body.style.overflow = '';
+  }
+
+  logoutAndClose() {
+    this.closeMobileMenu();
+    this.logout();
+  }
+
+  openProfileModal() {
+    this.isProfileModalOpen = true;
+  }
+
+  closeProfileModal() {
+    this.isProfileModalOpen = false;
+  }
+
+  onProfileSaved() {
+  }
+
+  onProfileDeleted() {
+    this.closeProfileModal();
+    this.logout();
   }
 }

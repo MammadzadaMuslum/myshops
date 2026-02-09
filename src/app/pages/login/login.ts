@@ -62,7 +62,7 @@ export class Login {
         this.loading = false;
 
         if (userFound) {
-          this.userService.setUser(userFound.name);
+          this.userService.setUser(userFound.name, userFound.email, userFound.id);
           this.router.navigateByUrl('/');
         } else {
           this.loginError = 'İstifadəçi adı/email və ya şifrə yanlışdır!';

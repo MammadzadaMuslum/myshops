@@ -3,29 +3,27 @@
     <div class="text-center">
       <h1 class="text-2xl font-extrabold text-gray-900">Login</h1>
       <p class="text-sm text-gray-500 mt-1">
-        MyShops hesabına giriş et
+        Sign in to your MyShops account
       </p>
     </div>
 
     <form class="mt-7 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
 
-      <!-- NAME -->
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Ad</mat-label>
+        <mat-label>Name</mat-label>
         <input matInput type="text" formControlName="name" />
 
         <mat-error *ngIf="name?.hasError('required')">
-          Ad boş ola bilməz
+          Name is required
         </mat-error>
 
         <mat-error *ngIf="name?.hasError('minlength')">
-          Ad minimum 3 simvol olmalıdır
+          Name must be at least 3 characters
         </mat-error>
       </mat-form-field>
 
-      <!-- PASSWORD -->
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Şifrə</mat-label>
+        <mat-label>Password</mat-label>
 
         <input
           matInput
@@ -71,11 +69,11 @@
         </button>
 
         <mat-error *ngIf="password?.hasError('required')">
-          Şifrə boş ola bilməz
+          Password is required
         </mat-error>
 
         <mat-error *ngIf="password?.hasError('minlength')">
-          Şifrə minimum 6 simvol olmalıdır
+          Password must be at least 6 characters
         </mat-error>
       </mat-form-field>
 
@@ -91,12 +89,12 @@
         class="w-full !rounded-xl !py-3 !font-semibold"
         [disabled]="loading"
       >
-        {{ loading ? "Yoxlanılır..." : "Giriş et" }}
+        {{ loading ? "Signing in..." : "Sign In" }}
       </button>
 
 
       <p class="text-sm text-gray-600 text-center pt-2">
-        Hesabın yoxdur?
+        Don't have an account?
         <a routerLink="/register" class="text-blue-600 font-semibold">
           Register
         </a>
