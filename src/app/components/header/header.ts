@@ -9,7 +9,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { UserService } from '../../services/user.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { CartService } from '../../services/cart.service';
 import { ProfileModalComponent } from '../profile-modal/profile-modal.component';
+import { CartModalComponent } from '../cart-modal/cart-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -23,17 +25,21 @@ import { ProfileModalComponent } from '../profile-modal/profile-modal.component'
     MatMenuModule,
     MatDividerModule,
     ProfileModalComponent,
+    CartModalComponent,
   ],
   templateUrl: './header.html',
 })
 export class Header implements OnInit {
   favoritesCount = 0;
+  cartItemsCount = 0;
   isMobileMenuOpen = false;
   isProfileModalOpen = false;
+  isCartModalOpen = false;
 
   constructor(
     public userService: UserService,
     private favoritesService: FavoritesService,
+    private cartService: CartService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {
@@ -43,6 +49,11 @@ export class Header implements OnInit {
   ngOnInit(): void {
     this.favoritesService.favorites$.subscribe(() => {
       this.favoritesCount = this.favoritesService.getFavoritesCount();
+      this.cdr.detectChanges();
+    });
+    
+    this.cartService.cart$.subscribe(cart => {
+      this.cartItemsCount = cart.totalItems;
       this.cdr.detectChanges();
     });
   }
@@ -90,5 +101,13 @@ export class Header implements OnInit {
   onProfileDeleted() {
     this.closeProfileModal();
     this.logout();
+  }
+  
+  openCartModal() {
+    this.isCartModalOpen = true;
+  }
+  
+  closeCartModal() {
+    this.isCartModalOpen = false;
   }
 }

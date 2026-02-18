@@ -8,12 +8,12 @@
     </div>
   </div>
 
-  <!-- Loading State -->
+
   <div *ngIf="loading" class="flex justify-center items-center py-12">
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
   </div>
 
-  <!-- Error State -->
+
   <div *ngIf="error" class="bg-red-50 border border-red-200 rounded-lg p-4 m-6">
     <div class="flex">
       <div class="flex-shrink-0">
@@ -83,7 +83,6 @@
     </table>
   </div>
 
-  <!-- Empty State -->
   <div *ngIf="!loading && !error && shops.length === 0" class="text-center py-12">
     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -93,7 +92,7 @@
   </div>
 </div>
 
-<!-- Shop Form Modal -->
+
 <app-shop-form-modal 
   *ngIf="showModal"
   [shop]="editingShop"

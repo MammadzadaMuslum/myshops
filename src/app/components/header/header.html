@@ -14,7 +14,6 @@
       </div>
     </a>
 
-    <!-- DESKTOP NAV -->
     <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-700">
       <a
         routerLink="/"
@@ -56,6 +55,22 @@
         class="hover:text-blue-600 transition"
         >Admin</a
       >
+      <button
+        (click)="openCartModal()"
+        class="hover:text-blue-600 transition relative cursor-pointer"
+        title="Shopping Cart"
+      >
+        <span class="flex items-center gap-1">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          Cart
+          <span *ngIf="cartItemsCount > 0" 
+                class="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+            {{ cartItemsCount }}
+          </span>
+        </span>
+      </button>
     </nav>
 
     <div class="hidden md:flex items-center gap-3">
@@ -115,7 +130,6 @@
       </ng-container>
     </div>
 
-    <!-- MOBILE HAMBURGER MENU -->
     <div class="md:hidden flex items-center">
       <button 
         (click)="toggleMobileMenu()" 
@@ -147,22 +161,21 @@
 </mat-toolbar>
 
 
-<!-- MOBILE SLIDE-OUT MENU -->
 <div 
   class="fixed inset-0 z-40 md:hidden"
   *ngIf="isMobileMenuOpen"
   (click)="closeMobileMenu()">
-  <!-- Backdrop -->
+
   <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300"></div>
   
-  <!-- Slide-out Drawer -->
+
   <div 
     class="absolute right-0 top-0 h-full w-72 bg-white shadow-2xl transform transition-transform duration-300 ease-out"
     [class.translate-x-full]="!isMobileMenuOpen"
     [class.translate-x-0]="isMobileMenuOpen"
     (click)="$event.stopPropagation()">
     
-    <!-- Drawer Header -->
+
     <div class="flex items-center justify-between p-4 border-b border-gray-100">
       <span class="text-lg font-bold text-gray-900">Menu</span>
       <button 
@@ -174,7 +187,7 @@
       </button>
     </div>
     
-    <!-- Navigation Links -->
+
     <nav class="p-4 space-y-1">
       <a
         routerLink="/"
@@ -228,12 +241,25 @@
         </svg>
         Admin
       </a>
+      
+      <button
+        (click)="closeMobileMenu(); openCartModal()"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium w-full">
+        <div class="relative">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span *ngIf="cartItemsCount > 0" 
+                class="absolute -top-1 -right-1 bg-blue-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+            {{ cartItemsCount }}
+          </span>
+        </div>
+        Cart
+      </button>
     </nav>
     
-    <!-- Divider -->
     <div class="border-t border-gray-100 mx-4"></div>
     
-    <!-- Auth Section -->
     <div class="p-4 space-y-1">
       <ng-container *ngIf="!userService.user()">
         <a
@@ -278,10 +304,14 @@
   </div>
 </div>
 
-<!-- Profile Modal -->
 <app-profile-modal
   *ngIf="isProfileModalOpen"
   (close)="closeProfileModal()"
   (saved)="onProfileSaved()"
   (deleted)="onProfileDeleted()">
 </app-profile-modal>
+
+<app-cart-modal
+  *ngIf="isCartModalOpen"
+  (close)="closeCartModal()">
+</app-cart-modal>

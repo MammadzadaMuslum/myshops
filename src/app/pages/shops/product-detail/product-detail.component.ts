@@ -4,6 +4,7 @@ import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ProductService, Product } from '../../../services/product.service';
 import { ShopService, Shop } from '../../../services/shop.service';
 import { FavoritesService } from '../../../services/favorites.service';
+import { CartService } from '../../../services/cart.service';
 import { DefaultImagePipe } from '../../../pipes/default-image.pipe';
 
 @Component({
@@ -26,6 +27,7 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private shopService: ShopService,
     private favoritesService: FavoritesService,
+    private cartService: CartService,
     private route: ActivatedRoute,
     public router: Router,
     private cdr: ChangeDetectorRef
@@ -93,6 +95,13 @@ export class ProductDetailComponent implements OnInit {
     if (this.product && this.shop) {
       this.favoritesService.toggleFavorite(this.product, this.shop.name);
       this.isFavorite = this.favoritesService.isFavorite(this.product.id);
+      this.cdr.detectChanges();
+    }
+  }
+
+  addToCart(): void {
+    if (this.product && this.shop) {
+      this.cartService.addToCart(this.product, this.shop.name);
       this.cdr.detectChanges();
     }
   }

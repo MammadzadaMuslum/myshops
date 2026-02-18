@@ -8,55 +8,74 @@
     </div>
   </div>
 
-  <div class="bg-white shadow-sm border-b border-gray-200 lg:sticky lg:top-0 lg:z-30">
+  <div class="bg-white shadow-sm border-b border-gray-200 lg:static lg:top-0 lg:z-30">
     <div class="container mx-auto px-4 py-4">
+
       <div class="max-w-3xl mx-auto mb-4">
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-          </div>
-          <input 
-            type="text" 
-            [(ngModel)]="searchQuery"
-            (input)="onSearch()"
-            placeholder="Search shops, products, categories..."
-            class="w-full pl-12 pr-24 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
-          >
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+        <div class="flex gap-2">
+          <div class="flex-1 relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()"
+              placeholder="Search products and shops..."
+              class="w-full pl-12 pr-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
+            >
             <button 
-              *ngIf="searchQuery"
-              (click)="searchQuery = ''; onSearch()"
-              class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-              title="Clear search"
+              *ngIf="searchTerm"
+              (click)="clearSearch()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
             </button>
+          </div>
+          
+          <div class="flex items-center bg-gray-100 rounded-xl p-1">
             <button 
-              (click)="toggleFilters()"
-              [class.bg-blue-50]="showFilters"
-              [class.text-blue-600]="showFilters"
-              class="ml-2 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-              title="Toggle filters"
+              (click)="setViewMode('grid')"
+              [class.bg-white]="viewMode === 'grid'"
+              [class.shadow-sm]="viewMode === 'grid'"
+              [class.text-gray-900]="viewMode === 'grid'"
+              [class.text-gray-600]="viewMode !== 'grid'"
+              class="px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 cursor-pointer"
             >
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
               </svg>
+              Grid
+            </button>
+            <button 
+              (click)="setViewMode('table')"
+              [class.bg-white]="viewMode === 'table'"
+              [class.shadow-sm]="viewMode === 'table'"
+              [class.text-gray-900]="viewMode === 'table'"
+              [class.text-gray-600]="viewMode !== 'table'"
+              class="px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-9 0h18a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+              </svg>
+              Table
             </button>
           </div>
         </div>
       </div>
 
+      <!-- Filters Panel -->
       <div *ngIf="showFilters" class="max-w-3xl mx-auto bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
         <div class="flex items-center justify-between mb-3">
           <h3 class="font-semibold text-gray-700">Filters</h3>
           <button 
             *ngIf="hasActiveFilters()"
             (click)="clearFilters()"
-            class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+            class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 cursor-pointer"
           >
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -70,8 +89,8 @@
             <label class="block text-sm font-medium text-gray-600 mb-1">Category</label>
             <select 
               [(ngModel)]="selectedCategory" 
-              (change)="applyFilters()"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              (change)="applySearch()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-pointer"
             >
               <option value="">All Categories</option>
               <optgroup label="Shop Categories">
@@ -87,8 +106,8 @@
             <label class="block text-sm font-medium text-gray-600 mb-1">Shop</label>
             <select 
               [(ngModel)]="selectedShop" 
-              (change)="applyFilters()"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              (change)="applySearch()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-pointer"
             >
               <option [ngValue]="null">All Shops</option>
               <option *ngFor="let shop of shops" [ngValue]="shop.id">{{ shop.name }}</option>
@@ -99,8 +118,8 @@
             <label class="block text-sm font-medium text-gray-600 mb-1">Sort Products By</label>
             <select 
               [(ngModel)]="sortBy" 
-              (change)="applyFilters()"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              (change)="applySearch()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-pointer"
             >
               <option value="name">Name (A-Z)</option>
               <option value="price-low">Price: Low to High</option>
@@ -112,45 +131,61 @@
       </div>
 
       <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
+        <div class="flex items-center gap-2">
           <button 
-            (click)="setActiveTab('all')"
-            [class.bg-white]="activeTab === 'all'"
-            [class.shadow-sm]="activeTab === 'all'"
-            [class.text-gray-900]="activeTab === 'all'"
-            [class.text-gray-600]="activeTab !== 'all'"
-            class="px-4 py-2 rounded-md font-medium text-sm transition-all"
+            (click)="toggleFilters()"
+            [class.bg-blue-50]="showFilters"
+            [class.text-blue-600]="showFilters"
+            class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+            title="Toggle filters"
           >
-            All ({{ searchResults.length }})
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+            </svg>
           </button>
-          <button 
-            (click)="setActiveTab('shops')"
-            [class.bg-white]="activeTab === 'shops'"
-            [class.shadow-sm]="activeTab === 'shops'"
-            [class.text-gray-900]="activeTab === 'shops'"
-            [class.text-gray-600]="activeTab !== 'shops'"
-            class="px-4 py-2 rounded-md font-medium text-sm transition-all"
-          >
-            Shops ({{ filteredShops.length }})
-          </button>
-          <button 
-            (click)="setActiveTab('products')"
-            [class.bg-white]="activeTab === 'products'"
-            [class.shadow-sm]="activeTab === 'products'"
-            [class.text-gray-900]="activeTab === 'products'"
-            [class.text-gray-600]="activeTab !== 'products'"
-            class="px-4 py-2 rounded-md font-medium text-sm transition-all"
-          >
-            Products ({{ filteredProducts.length }})
-          </button>
+
+          <div *ngIf="viewMode === 'grid'" class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
+            <button 
+              (click)="setActiveTab('all')"
+              [class.bg-white]="activeTab === 'all'"
+              [class.shadow-sm]="activeTab === 'all'"
+              [class.text-gray-900]="activeTab === 'all'"
+              [class.text-gray-600]="activeTab !== 'all'"
+              class="px-4 py-2 rounded-md font-medium text-sm transition-all cursor-pointer"
+            >
+              All ({{ searchResults.length }})
+            </button>
+            <button 
+              (click)="setActiveTab('shops')"
+              [class.bg-white]="activeTab === 'shops'"
+              [class.shadow-sm]="activeTab === 'shops'"
+              [class.text-gray-900]="activeTab === 'shops'"
+              [class.text-gray-600]="activeTab !== 'shops'"
+              class="px-4 py-2 rounded-md font-medium text-sm transition-all cursor-pointer"
+            >
+              Shops
+            </button>
+            <button 
+              (click)="setActiveTab('products')"
+              [class.bg-white]="activeTab === 'products'"
+              [class.shadow-sm]="activeTab === 'products'"
+              [class.text-gray-900]="activeTab === 'products'"
+              [class.text-gray-600]="activeTab !== 'products'"
+              class="px-4 py-2 rounded-md font-medium text-sm transition-all cursor-pointer"
+            >
+              Products
+            </button>
+          </div>
         </div>
 
         <span class="text-sm text-gray-500">
-          Showing {{ getResultsCount() }} result{{ getResultsCount() !== 1 ? 's' : '' }}
+          <span *ngIf="viewMode === 'grid'">Showing {{ getResultsCount() }} result{{ getResultsCount() !== 1 ? 's' : '' }}</span>
+          <span *ngIf="viewMode === 'table'">Showing {{ tableProducts.length }} product{{ tableProducts.length !== 1 ? 's' : '' }}</span>
         </span>
       </div>
     </div>
   </div>
+
 
   <div class="container mx-auto px-4 py-8">
     <!-- Loading State -->
@@ -174,7 +209,8 @@
       </button>
     </div>
 
-    <div *ngIf="!loading && !error" class="max-w-6xl mx-auto">
+
+    <div *ngIf="!loading && !error && viewMode === 'grid'" class="max-w-6xl mx-auto">
       <div *ngIf="visibleResults.length === 0" class="text-center py-16">
         <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,6 +230,7 @@
 
       <div *ngIf="visibleResults.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <ng-container *ngFor="let result of visibleResults">
+
           <div *ngIf="result.type === 'shop'" 
                [routerLink]="['/shops', asShop(result.item).id]"
                class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 group">
@@ -285,6 +322,82 @@
             </div>
           </div>
         </ng-container>
+      </div>
+    </div>
+    
+    <div *ngIf="!loading && !error && viewMode === 'table'" class="max-w-6xl mx-auto">
+      <div *ngIf="tableProducts.length === 0" class="text-center py-16">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
+        <p class="text-gray-600 mb-6">Try adjusting your search or filters</p>
+        <button 
+          *ngIf="hasActiveFilters()"
+          (click)="clearFilters()"
+          class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+        >
+          Clear all filters
+        </button>
+      </div>
+
+      <div *ngIf="tableProducts.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detail</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shop</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let item of tableProducts" class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <img 
+                      [src]="item.product.imageUrl | defaultImage" 
+                      [alt]="item.product.name"
+                      class="w-12 h-12 rounded-lg object-cover"
+                    >
+                    <div>
+                      <a [routerLink]="['/products', item.product.id]" class="font-medium text-gray-900 hover:text-blue-600 transition-colors">
+                        {{ item.product.name }}
+                      </a>
+                      <p class="text-sm text-gray-500">{{ item.product.category }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <p class="text-sm text-gray-600 max-w-xs truncate">{{ item.product.description || 'No description' }}</p>
+                </td>
+                <td class="px-6 py-4">
+                  <a [routerLink]="['/shops', item.product.shopId]" class="text-sm text-gray-700 hover:text-blue-600 transition-colors">
+                    {{ item.shopName }}
+                  </a>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="font-semibold text-gray-900">${{ item.product.price | number:'1.0-0' }}</span>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
+                        [class.bg-green-100]="item.product.stock > 10"
+                        [class.text-green-800]="item.product.stock > 10"
+                        [class.bg-yellow-100]="item.product.stock <= 10 && item.product.stock > 0"
+                        [class.text-yellow-800]="item.product.stock <= 10 && item.product.stock > 0"
+                        [class.bg-red-100]="item.product.stock === 0"
+                        [class.text-red-800]="item.product.stock === 0">
+                    {{ item.product.stock > 0 ? item.product.stock : 'Out' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

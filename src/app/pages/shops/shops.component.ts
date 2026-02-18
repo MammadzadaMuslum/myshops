@@ -5,12 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { ShopService, Shop } from '../../services/shop.service';
 import { ProductService, Product } from '../../services/product.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { CartService, CartItem } from '../../services/cart.service';
 import { DefaultImagePipe } from '../../pipes/default-image.pipe';
 
-interface SearchResult {
-  type: 'shop' | 'product';
-  item: Shop | Product;
-  shopName?: string;
+interface TableProduct {
+  product: Product;
+  shopName: string;
 }
 
 @Component({
@@ -23,21 +23,29 @@ interface SearchResult {
 export class ShopsComponent implements OnInit {
   shops: Shop[] = [];
   products: Product[] = [];
-  filteredShops: Shop[] = [];
   filteredProducts: Product[] = [];
-  searchResults: SearchResult[] = [];
   loading = true;
   error: string | null = null;
   
-  // Search and Filter State
-  searchQuery = '';
+  searchTerm = '';
+  
+
+  viewMode: 'grid' | 'table' = 'table';
+  
+
+  tableProducts: TableProduct[] = [];
+  
+
+  searchResults: Array<{type: 'shop' | 'product'; item: Shop | Product; shopName?: string}> = [];
+
   selectedCategory = '';
   selectedShop: number | null = null;
   sortBy: 'name' | 'price-low' | 'price-high' | 'stock' = 'name';
   showFilters = false;
   activeTab: 'all' | 'shops' | 'products' = 'all';
   
-  // Available categories
+  cartItems: CartItem[] = [];
+  
   shopCategories: string[] = [];
   productCategories: string[] = [];
 
@@ -45,10 +53,16 @@ export class ShopsComponent implements OnInit {
     private shopService: ShopService,
     private productService: ProductService,
     private favoritesService: FavoritesService,
+    private cartService: CartService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.cartService.cart$.subscribe(cart => {
+      this.cartItems = cart.items;
+      this.cdr.detectChanges();
+    });
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -59,11 +73,9 @@ export class ShopsComponent implements OnInit {
     this.error = null;
     this.cdr.detectChanges();
     
-    // Load both shops and products
     this.shopService.getShops().subscribe({
       next: (shops) => {
         this.shops = shops;
-        this.filteredShops = [...shops];
         this.shopCategories = [...new Set(shops.map(s => s.category))];
         
         this.productService.getProducts().subscribe({
@@ -72,7 +84,7 @@ export class ShopsComponent implements OnInit {
             this.filteredProducts = [...products];
             this.productCategories = [...new Set(products.map(p => p.category))];
             this.loading = false;
-            this.applyFilters();
+            this.applySearch();
             this.cdr.detectChanges();
           },
           error: (err) => {
@@ -92,27 +104,15 @@ export class ShopsComponent implements OnInit {
     });
   }
 
+
   onSearch(): void {
-    this.applyFilters();
+    this.applySearch();
   }
 
-  applyFilters(): void {
-    const query = this.searchQuery.toLowerCase().trim();
+  applySearch(): void {
+    const query = this.searchTerm.toLowerCase().trim();
     
-    // Filter shops
-    this.filteredShops = this.shops.filter(shop => {
-      const matchesSearch = !query || 
-        shop.name.toLowerCase().includes(query) ||
-        shop.ownerName.toLowerCase().includes(query) ||
-        shop.category.toLowerCase().includes(query) ||
-        shop.address.toLowerCase().includes(query);
-      
-      const matchesCategory = !this.selectedCategory || shop.category === this.selectedCategory;
-      
-      return matchesSearch && matchesCategory;
-    });
-
-    // Filter products
+    // Filter products for both views
     this.filteredProducts = this.products.filter(product => {
       const matchesSearch = !query || 
         product.name.toLowerCase().includes(query) ||
@@ -136,32 +136,49 @@ export class ShopsComponent implements OnInit {
       this.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    // Build combined search results
-    this.buildSearchResults();
+    // Prepare table data
+    this.tableProducts = this.filteredProducts.map(product => ({
+      product,
+      shopName: this.getShopName(product.shopId)
+    }));
+
+    // Prepare grid data (original logic)
+    this.buildGridResults();
     this.cdr.detectChanges();
   }
 
-  buildSearchResults(): void {
+  buildGridResults(): void {
+    const query = this.searchTerm.toLowerCase().trim();
     this.searchResults = [];
     
-    // Add filtered shops
-    this.filteredShops.forEach(shop => {
+    // Filter and add shops
+    const filteredShops = this.shops.filter(shop => {
+      const matchesSearch = !query || 
+        shop.name.toLowerCase().includes(query) ||
+        shop.ownerName.toLowerCase().includes(query) ||
+        shop.category.toLowerCase().includes(query) ||
+        shop.address.toLowerCase().includes(query);
+      
+      const matchesCategory = !this.selectedCategory || shop.category === this.selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+    
+    filteredShops.forEach(shop => {
       this.searchResults.push({ type: 'shop', item: shop });
     });
     
-    // Add filtered products with shop names
+    // Add filtered products
     this.filteredProducts.forEach(product => {
-      const shop = this.shops.find(s => s.id === product.shopId);
       this.searchResults.push({ 
         type: 'product', 
         item: product,
-        shopName: shop?.name 
+        shopName: this.getShopName(product.shopId)
       });
     });
 
-    // Sort results by relevance (exact matches first)
-    if (this.searchQuery) {
-      const query = this.searchQuery.toLowerCase();
+    if (this.searchTerm) {
+      const query = this.searchTerm.toLowerCase();
       this.searchResults.sort((a, b) => {
         const aName = (a.item.name || '').toLowerCase();
         const bName = (b.item.name || '').toLowerCase();
@@ -172,21 +189,57 @@ export class ShopsComponent implements OnInit {
     }
   }
 
+  setViewMode(mode: 'grid' | 'table'): void {
+    this.viewMode = mode;
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.applySearch();
+  }
+
+  addToCart(product: Product, shopName: string, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    this.cartService.addToCart(product, shopName);
+    this.cdr.detectChanges();
+  }
+
+  removeFromCart(productId: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    this.cartService.removeFromCart(productId);
+    this.cdr.detectChanges();
+  }
+
+  isInCart(productId: number): boolean {
+    return this.cartService.isInCart(productId);
+  }
+
+  getCartQuantity(productId: number): number {
+    const item = this.cartItems.find(item => item.product.id === productId);
+    return item?.quantity || 0;
+  }
+
   clearFilters(): void {
-    this.searchQuery = '';
+    this.searchTerm = '';
     this.selectedCategory = '';
     this.selectedShop = null;
     this.sortBy = 'name';
     this.activeTab = 'all';
-    this.applyFilters();
+    this.applySearch();
   }
 
   hasActiveFilters(): boolean {
-    return !!this.searchQuery || !!this.selectedCategory || !!this.selectedShop || this.sortBy !== 'name';
+    return !!this.searchTerm || !!this.selectedCategory || !!this.selectedShop || this.sortBy !== 'name';
   }
 
   getResultsCount(): number {
-    if (this.activeTab === 'shops') return this.filteredShops.length;
+    if (this.activeTab === 'shops') return this.searchResults.filter(r => r.type === 'shop').length;
     if (this.activeTab === 'products') return this.filteredProducts.length;
     return this.searchResults.length;
   }
@@ -204,7 +257,7 @@ export class ShopsComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  get visibleResults(): SearchResult[] {
+  get visibleResults() {
     if (this.activeTab === 'shops') {
       return this.searchResults.filter(r => r.type === 'shop');
     }
@@ -214,7 +267,6 @@ export class ShopsComponent implements OnInit {
     return this.searchResults;
   }
 
-  // Type guard methods for template
   isShop(item: Shop | Product): item is Shop {
     return 'status' in item && 'ownerName' in item;
   }
