@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartItem, CartService } from '../../services/cart.service';
+import { CartStore, CartItem } from '../../store/cart.store';
 
 @Component({
   selector: 'app-cart-modal',
@@ -20,29 +20,29 @@ import { CartItem, CartService } from '../../services/cart.service';
         
         <div class="p-6">
           <!-- Empty Cart -->
-          <div *ngIf="cartItems.length === 0" class="text-center py-8">
+          <div *ngIf="(cartStore.items$ | async)?.length === 0" class="text-center py-8">
             <p class="text-gray-500">Your cart is empty</p>
           </div>
           
           <!-- Cart Items -->
-          <div *ngIf="cartItems.length > 0" class="space-y-4">
-            <div *ngFor="let item of cartItems" class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
+          <div *ngIf="(cartStore.items$ | async) as items" class="space-y-4">
+            <div *ngFor="let item of items" class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
               <div class="flex-1">
-                <h4 class="font-medium text-gray-900 text-sm">{{ item.product.name }}</h4>
+                <h4 class="font-medium text-gray-900 text-sm">{{ item.name }}</h4>
                 <p class="text-xs text-gray-500">{{ item.shopName }}</p>
-                <p class="text-blue-600 font-semibold text-sm">{{ '$' + item.product.price.toFixed(2) }}</p>
+                <p class="text-blue-600 font-semibold text-sm">{{ '$' + item.price.toFixed(2) }}</p>
               </div>
               
               <div class="flex items-center gap-1">
                 <button 
-                  (click)="updateQuantity(item.product.id, item.quantity - 1)"
+                  (click)="updateQuantity(item.productId, item.quantity - 1)"
                   class="w-7 h-7 rounded bg-gray-100 flex items-center justify-center hover:bg-gray-200 text-sm"
                 >
                   -
                 </button>
                 <span class="w-8 text-center text-sm">{{ item.quantity }}</span>
                 <button 
-                  (click)="updateQuantity(item.product.id, item.quantity + 1)"
+                  (click)="updateQuantity(item.productId, item.quantity + 1)"
                   class="w-7 h-7 rounded bg-gray-100 flex items-center justify-center hover:bg-gray-200 text-sm"
                 >
                   +
@@ -50,7 +50,7 @@ import { CartItem, CartService } from '../../services/cart.service';
               </div>
               
               <button 
-                (click)="removeItem(item.product.id)"
+                (click)="removeItem(item.productId)"
                 class="text-red-500 hover:text-red-700 text-sm"
               >
                 Remove
@@ -58,9 +58,9 @@ import { CartItem, CartService } from '../../services/cart.service';
             </div>
             
             <!-- Total -->
-            <div class="border-t border-gray-200 pt-4 mt-4">
+            <div *ngIf="items.length > 0" class="border-t border-gray-200 pt-4 mt-4">
               <div class="flex justify-between items-center mb-4">
-                <span class="font-semibold text-gray-900">Total: {{ '$' + totalPrice.toFixed(2) }}</span>
+                <span class="font-semibold text-gray-900">Total: {{ '$' + ((cartStore.totalPrice$ | async) || 0).toFixed(2) }}</span>
               </div>
               
               <div class="flex gap-3">
@@ -103,28 +103,19 @@ import { CartItem, CartService } from '../../services/cart.service';
 export class CartModalComponent {
   @Output() close = new EventEmitter<void>();
   
+  cartStore = inject(CartStore);
   showSuccess = false;
-  
-  cartItems: CartItem[] = [];
-  totalPrice = 0;
-
-  constructor(private cartService: CartService) {
-    this.cartService.cart$.subscribe(state => {
-      this.cartItems = state.items;
-      this.totalPrice = state.totalPrice;
-    });
-  }
 
   updateQuantity(productId: number, quantity: number): void {
-    this.cartService.updateQuantity(productId, quantity);
+    this.cartStore.updateQuantity({ productId, quantity });
   }
 
   removeItem(productId: number): void {
-    this.cartService.removeFromCart(productId);
+    this.cartStore.removeFromCart(productId);
   }
 
   checkout(): void {
-    this.cartService.clearCart();
+    this.cartStore.clearCart();
     this.showSuccess = true;
   }
 

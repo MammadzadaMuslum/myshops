@@ -38,7 +38,6 @@ export class AdminProductsComponent implements OnInit {
     
     this.productService.getProducts().subscribe({
       next: (data) => {
-        console.log('Products loaded:', data);
         this.products = data;
         this.loading = false;
         this.cdr.detectChanges();

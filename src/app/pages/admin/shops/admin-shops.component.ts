@@ -33,7 +33,6 @@ export class AdminShopsComponent implements OnInit {
     
     this.shopService.getShops().subscribe({
       next: (data) => {
-        console.log('Shops loaded:', data);
         this.shops = data;
         this.loading = false;
         this.cdr.detectChanges();

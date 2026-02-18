@@ -1,5 +1,5 @@
 // src/app/components/header/header.ts
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,7 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { UserService } from '../../services/user.service';
 import { FavoritesService } from '../../services/favorites.service';
-import { CartService } from '../../services/cart.service';
+import { CartStore } from '../../store/cart.store';
 import { ProfileModalComponent } from '../profile-modal/profile-modal.component';
 import { CartModalComponent } from '../cart-modal/cart-modal.component';
 
@@ -30,6 +30,8 @@ import { CartModalComponent } from '../cart-modal/cart-modal.component';
   templateUrl: './header.html',
 })
 export class Header implements OnInit {
+  cartStore = inject(CartStore);
+  
   favoritesCount = 0;
   cartItemsCount = 0;
   isMobileMenuOpen = false;
@@ -39,7 +41,6 @@ export class Header implements OnInit {
   constructor(
     public userService: UserService,
     private favoritesService: FavoritesService,
-    private cartService: CartService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {
@@ -52,8 +53,8 @@ export class Header implements OnInit {
       this.cdr.detectChanges();
     });
     
-    this.cartService.cart$.subscribe(cart => {
-      this.cartItemsCount = cart.totalItems;
+    this.cartStore.totalCount$.subscribe(count => {
+      this.cartItemsCount = count;
       this.cdr.detectChanges();
     });
   }

@@ -59,8 +59,7 @@ export class ShopDetailComponent implements OnInit {
     this.productService.getProductsByShop(shopId).subscribe({
       next: (products) => {
         this.products = products;
-        
-        // Load related products (same category, from other shops)
+       
         if (products.length > 0) {
           this.loadRelatedProducts(products[0].category, shopId);
         } else {

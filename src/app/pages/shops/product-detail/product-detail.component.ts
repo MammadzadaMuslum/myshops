@@ -1,10 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ProductService, Product } from '../../../services/product.service';
 import { ShopService, Shop } from '../../../services/shop.service';
 import { FavoritesService } from '../../../services/favorites.service';
-import { CartService } from '../../../services/cart.service';
+import { CartStore } from '../../../store/cart.store';
 import { DefaultImagePipe } from '../../../pipes/default-image.pipe';
 
 @Component({
@@ -23,11 +23,12 @@ export class ProductDetailComponent implements OnInit {
 
   isFavorite = false;
 
+  cartStore = inject(CartStore);
+
   constructor(
     private productService: ProductService,
     private shopService: ShopService,
     private favoritesService: FavoritesService,
-    private cartService: CartService,
     private route: ActivatedRoute,
     public router: Router,
     private cdr: ChangeDetectorRef
@@ -35,6 +36,14 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const productId = Number(this.route.snapshot.paramMap.get('id'));
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      if (id) {
+        this.loadProductData(id);
+      } else {
+        this.router.navigate(['/shops']);
+      }
+    });
     if (productId) {
       this.loadProductData(productId);
     } else {
@@ -101,8 +110,7 @@ export class ProductDetailComponent implements OnInit {
 
   addToCart(): void {
     if (this.product && this.shop) {
-      this.cartService.addToCart(this.product, this.shop.name);
-      this.cdr.detectChanges();
+      this.cartStore.addToCart({ ...this.product, shopName: this.shop.name });
     }
   }
 }
